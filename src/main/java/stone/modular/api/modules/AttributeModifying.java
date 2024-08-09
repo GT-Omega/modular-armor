@@ -1,16 +1,41 @@
 package stone.modular.api.modules;
 
-public interface AttributeModifying {
+import net.minecraft.world.entity.ai.attributes.Attribute;
+
+public interface AttributeModifying extends Comparable<AttributeModifying>, Module {
+
+    /**
+     * @return the attribute being modified
+     */
+    Attribute getAttribute();
+
+    ModificationPriority getPriority();
+    
+    double modifyAttribute(double old);
+
+    public default int compareTo(AttributeModifying other) {
+        return this.getPriority().compareTo(other.getPriority());
+    }
 
     /**
      * Enum representing the priority that AttributeModification should take
      * 
-     * note for tomorrow, maybe split this to a standalone enum to use for all my
-     * priority needs
+     * This enum is NOT exhaustive, add in additional levels as needed
      */
     public static enum ModificationPriority implements Comparable<ModificationPriority> {
         // order of this matters, it's what determines the sorting of these for
         // Comparable
-        FIRST, ADDITIVE, MULTIPLICATIVE, POST_MULTIPLICATIVE, FINAL;
+        /**
+         * For modifying the base attribute value
+         */
+        GOOD_ADDITIVE,
+        /**
+         * For buffing the attribute's value after its been added too
+         */
+        MULTIPLICATIVE,
+        /**
+         * For modifying the attributes value after its been buffed
+         */
+        BAD_ADDITIVE;
     }
 }
