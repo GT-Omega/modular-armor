@@ -11,8 +11,8 @@ import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import org.lwjgl.glfw.GLFW;
 
-import stone.modular.ModularMod;
 import stone.modular.client.gui.ArmorModuleScreen;
+import stone.modular.client.gui.menu.ArmorModuleMenu;
 
 public interface Proxy {
     public void init(IEventBus bus);
@@ -36,8 +36,9 @@ public interface Proxy {
                 {
                         while (ARMOR_GUI_MAPPING.consumeClick())
                         {
-                            ModularMod.LOGGER.info("pressing keybind!");
-                            Minecraft.getInstance().setScreen(new ArmorModuleScreen());
+
+                        Minecraft.getInstance()
+                            .setScreen(new ArmorModuleScreen(new ArmorModuleMenu(0, null), null));
                         }
                 }
             });
