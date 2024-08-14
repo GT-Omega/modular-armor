@@ -5,8 +5,9 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
 
 import stone.modular.api.modules.AttributeModifying;
+import stone.modular.item.module.AbstractModuleItem;
 
-public abstract class AttributeModule extends Item implements AttributeModifying {
+public abstract class AttributeModule extends AbstractModuleItem implements AttributeModifying {
 
     private final EquipmentSlot slot;
     private final Attribute attribute;

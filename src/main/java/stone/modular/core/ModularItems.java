@@ -4,11 +4,13 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import stone.modular.ModularMod;
+import stone.modular.api.modules.ModuleRegistry;
 import stone.modular.item.armor.ModularBoots;
 import stone.modular.item.armor.ModularChestplate;
 import stone.modular.item.armor.ModularHelmet;
@@ -30,10 +32,16 @@ public abstract class ModularItems {
     public static RegistryObject<ModularBoots> MODULAR_BOOTS = ITEMS.register("modular_boots",
         ModularBoots::new);
 
-    public static RegistryObject<AttributeModule> MODULE_ARMOR = ITEMS.register("module_armor",
-        () -> new AttributeModule.Additive(EquipmentSlot.CHEST, Attributes.ARMOR, 10));
+    public static RegistryObject<AttributeModule> MODULE_ARMOR = ITEMS
+        .register("module_armor",
+            () -> new AttributeModule.Additive(EquipmentSlot.CHEST, Attributes.ARMOR, 10));
 
     public static void init(IEventBus bus) {
         ITEMS.register(bus);
+        bus.addListener((FMLCommonSetupEvent event) ->
+        {
+            ModuleRegistry.toKey.put(MODULE_ARMOR.get(), MODULE_ARMOR.getId().toString());
+            ModuleRegistry.toModule.put(MODULE_ARMOR.getId().toString(), MODULE_ARMOR.get());
+        });
     };
 }
