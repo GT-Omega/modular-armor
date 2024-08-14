@@ -23,9 +23,15 @@ public abstract class AbstractModuleItem extends Item implements Module {
         if (armorStack.getItem() instanceof ModularArmor armor)
         {
             ItemStack stack = player.getItemInHand(usedHand);
-            armor.addModule(armorStack, (Module) stack.getItem());
+            if (!armor.getModules(armorStack).contains(this))
+            {
+            armor.addModule(armorStack, this);
             stack.shrink(1);
             return InteractionResultHolder.success(stack);
+        } else
+        {
+            return InteractionResultHolder.fail(stack);
+            }
         } else
         {
             return super.use(level, player, usedHand);

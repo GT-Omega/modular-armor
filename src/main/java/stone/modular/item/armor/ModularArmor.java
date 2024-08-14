@@ -28,8 +28,10 @@ import stone.modular.api.modules.ModuleRegistry;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NavigableSet;
+import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public abstract class ModularArmor extends Item implements Equipable {
@@ -127,13 +129,16 @@ public abstract class ModularArmor extends Item implements Equipable {
             {
                 value = mod.modifyAttribute(value);
             }
-            stack.addAttributeModifier(null, null, getEquipmentSlot());
+            // deterministic yet random uuid
+            Random rand = new Random((long) entry.getKey().getDescriptionId().hashCode());
+            UUID uuid = new UUID(rand.nextLong(), rand.nextLong());
             // maybe use Minecraft's default attribute modifiers instead?
             // would play nicer, but has less modifier types (but how many do we really
             // need?)
+            // also how do you remove attribute modifiers??
             stack
                 .addAttributeModifier(entry.getKey(),
-                    new AttributeModifier("modular_attribute_modifier", value,
+                    new AttributeModifier(uuid, "modular_attribute_modifier", value,
                         AttributeModifier.Operation.ADDITION),
                     getEquipmentSlot());
         }
