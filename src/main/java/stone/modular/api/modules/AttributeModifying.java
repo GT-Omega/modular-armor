@@ -2,16 +2,35 @@ package stone.modular.api.modules;
 
 import net.minecraft.world.entity.ai.attributes.Attribute;
 
+/**
+ * A Module that modifys one of Minecraft's attributes
+ * 
+ * 
+ */
 public interface AttributeModifying extends Comparable<AttributeModifying>, Module {
 
     /**
-     * @return the attribute being modified
+     * @return the attribute to be modified
      */
     Attribute getAttribute();
 
+    /**
+     * Defines the order that modules should be calculated in. Note that within a
+     * priority the order is not defined, so ensure that all the modules are
+     * commutative
+     * 
+     * @return the priority for order of operations
+     */
     ModificationPriority getPriority();
     
-    double modifyAttribute(double old);
+    /**
+     * Give the old attribute's value, modify it however you please and return the
+     * new value
+     * 
+     * @param old the current value of the attribute
+     * @return the new value of the attribute
+     */
+    double modifyAttribute(double current);
 
     public default int compareTo(AttributeModifying other) {
         return this.getPriority().compareTo(other.getPriority());

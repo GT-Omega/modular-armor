@@ -22,6 +22,7 @@ import net.minecraft.world.level.Level;
 
 import stone.modular.ModularMod;
 import stone.modular.api.modules.AttributeModifying;
+import stone.modular.api.modules.Modular;
 import stone.modular.api.modules.Module;
 import stone.modular.api.modules.ModuleRegistry;
 
@@ -34,9 +35,8 @@ import java.util.TreeSet;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public abstract class ModularArmor extends Item implements Equipable {
+public abstract class ModularArmor extends Item implements Equipable, Modular {
 
-    public static final String MODULE_LIST = "modules";
     @Override
     public int getEnchantmentLevel(ItemStack stack, Enchantment enchantment) {
         // prevent the player from taking off the super good armor,
@@ -85,10 +85,12 @@ public abstract class ModularArmor extends Item implements Equipable {
     // TODO try not to do so much switching between NBT and Java objects, probably
     // has to be done in the GUI or something
 
+    @Override
     public void addModule(ItemStack stack, Module mod) {
         addModules(stack, Set.of(mod));
     }
 
+    @Override
     public void addModules(ItemStack stack, Set<Module> mods) {
         CompoundTag tag = stack.getOrCreateTag();
         ListTag list = tag.getList(MODULE_LIST, Tag.TAG_STRING);
@@ -144,6 +146,7 @@ public abstract class ModularArmor extends Item implements Equipable {
         }
     }
 
+    @Override
     public Set<Module> getModules(ItemStack stack) {
         CompoundTag tag = stack.getOrCreateTag();
         return tag.getList(MODULE_LIST, Tag.TAG_STRING)
